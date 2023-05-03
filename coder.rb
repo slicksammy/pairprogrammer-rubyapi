@@ -10,7 +10,8 @@ class Coder
             context: context,
             requirements: requirements
         }
-        Client.new.post('/api/v1/coder', body)
+        response = Client.new.post('/api/v1/coder', body)
+        response["id"]
     end
 
     def self.run(id)
@@ -18,13 +19,20 @@ class Coder
             id: id
         }
         response = Client.new.post('/api/v1/coder/run', body)
-        body = JSON.parse(response.body)
-        command_information = body["command"]
+        command_information = response["command"]
+        byebug
         output = Command.run(command_information["command"], command_information["arguments"])
         body = {
             id: id,
             output: output
         }
         Client.new.post('/api/v1/coder/append_output', body)
+    end
+
+    def self.list
+        coders = Client.new.get('/api/v1/coder/list', {})
+        coders.each do |obj|
+            puts "#{obj["id"]} - tasks: #{obj["tasks"].join(", ")}"
+        end
     end
 end

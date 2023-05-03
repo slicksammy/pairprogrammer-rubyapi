@@ -27,7 +27,7 @@ when 'coder'
             end
         end.parse!
 
-        Coder.create(options[:tasks], options[:context], options[:requirements])
+        puts Coder.create(options[:tasks], options[:context], options[:requirements])
     when "run"
         OptionParser.new do |opts|
             # Set the banner attribute
@@ -37,9 +37,10 @@ when 'coder'
                 options[:id] = id
             end
         end.parse!
-        
-        puts(options[:id])
+
         Coder.run(options[:id])
+    when "list"
+        Coder.list
     end
 else
   puts 'Invalid command! Use `pairprogrammer help` for more information.'

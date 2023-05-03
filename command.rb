@@ -4,8 +4,12 @@ require 'fileutils'
 
 class Command
     def self.run(command, arguments)
-        byebug
         case command
+        when "write_file"
+            file_path = Settings.absolute_path(arguments["file_path"])
+            File.open(file_path, "w") do |file|
+                file.puts(arguments["content"])
+            end
         when "create_directory"
             directory_path = Settings.absolute_path(arguments["directory_path"])
             FileUtils.mkdir_p(directory_path)

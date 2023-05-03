@@ -1,6 +1,7 @@
 require 'net/http'
 require 'uri'
 require 'json'
+require 'byebug'
 
 class Client
     def initialize
@@ -19,6 +20,9 @@ class Client
         request.body = body.to_json
         request['Content-Type'] = 'application/json'
         response = Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(request) }
+        if !response.body.empty?
+            JSON.parse(response.body)
+        end
     end
 
     private
