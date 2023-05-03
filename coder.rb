@@ -20,7 +20,6 @@ class Coder
         }
         response = Client.new.post('/api/v1/coder/run', body)
         command_information = response["command"]
-        byebug
         output = Command.run(command_information["command"], command_information["arguments"])
         body = {
             id: id,

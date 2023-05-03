@@ -5,6 +5,8 @@ require 'fileutils'
 class Command
     def self.run(command, arguments)
         case command
+        when "comment"
+            puts arguments["comment"]
         when "write_file"
             file_path = Settings.absolute_path(arguments["file_path"])
             File.open(file_path, "w") do |file|
