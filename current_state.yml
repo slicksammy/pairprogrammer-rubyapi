@@ -1,0 +1,11 @@
+---
+projects:
+  demo_rails:
+    planner_id: 38022e46-6a1b-4eef-a5ab-98437adf803f
+    coder_id: a1d86bd5-3416-475d-a02c-66bb56638081
+  my_site:
+    planner_id: 88f39b08-1c02-4bc9-943e-28cf7ec77257
+    coder_id: eeef6307-b27d-4259-a67c-7388e141aca6
+  jr_dev:
+    planner_id: ba4a33cb-6a52-48e8-bb13-6bc2d74829df
+    coder_id: 69b1e7b6-997f-443c-91ab-b014b274389f

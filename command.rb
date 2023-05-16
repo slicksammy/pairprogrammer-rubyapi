@@ -1,10 +1,33 @@
 require_relative 'settings'
 require 'byebug'
 require 'fileutils'
+require 'open3'
 
 class Command
     def self.run(command, arguments)
+        # TODO: move this into each command
+        puts "running command #{command} with arguments #{arguments}"
+        
         case command
+        when "update_file"
+            file_path = Settings.absolute_path(arguments["file_path"])
+            file_content = File.readlines(file_path)
+            file_content.insert(arguments["line_number"], arguments["content"])
+            File.open(file_path, 'w') do |file|
+                file_content.each { |line| file.puts(line) }
+            end
+        when "yarn"
+            run_shell "cd #{Settings.root} && yarn #{arguments["command"]}"
+        when "mv"
+            run_shell "cd #{Settings.root} && mv #{arguments["source"]} #{arguments["destination"]}"
+        when "python"
+            run_shell "cd #{Settings.root} && python3 manage.py #{arguments["command"]}"
+        when "ls"
+            run_shell "cd #{Settings.root} && ls #{arguments["directory_path"]}"
+        when "bundle"
+            run_shell "cd #{Settings.root} && bundle #{arguments["command"]}"
+        when "rails"
+            run_shell "cd #{Settings.root} && rails #{arguments["command"]}"
         when "comment"
             puts arguments["comment"]
         when "write_file"
@@ -34,7 +57,7 @@ class Command
             File.write(file_path, lines.join)
         when "rspec"
             file_path = Settings.absolute_path(arguments["file_path"])
-            %x{rspec #{file_path}}
+            run_shell "cd #{Settings.root} && rspec #{file_path}}"
         when "ask_question"
             puts arguments["question"]
             gets.chomp
@@ -70,6 +93,15 @@ class Command
             raise "Invalid command: #{command}"
         end
     end
+
+    def self.run_shell(command)
+        logs = ""
+        Open3.popen2e(command) do |stdin, stdout_err, wait_thr|
+            logs = stdout_err.read
+        end
+        logs
+    end
+
 
     def self.insert_content_at_line(file_path, content, line_number)
         # Read the file's content into an array
