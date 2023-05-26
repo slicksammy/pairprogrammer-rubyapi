@@ -16,4 +16,5 @@ projects:
     default_context: |
       Ruby on rails 7 app using postgres.
       Using importmap-rails for handling javascript dependencies.
-  default: "jr_dev"
+  default: "my_site"
+api_key: xRcwtYXz27TDSvnitYa8

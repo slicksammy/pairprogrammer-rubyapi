@@ -1,5 +1,14 @@
-require 'optparse'
-require_relative 'actions'
+require_relative 'cli/actions'
+require_relative 'pairprogrammer/configuration'
+require_relative 'cli/configuration'
+require 'optionparser'
+require_relative 'cli/display'
+
+PairProgrammer::Configuration.root = Cli::Configuration.root
+PairProgrammer::Configuration.api_key = Cli::Configuration.api_key
+
+# Cli::Display.dispaly_diff(File.read("lib/cli/actions.rb"), File.read("lib/cli/display.rb"))
+# return
 
 command = ARGV.shift
 options = {}
@@ -13,17 +22,17 @@ when 'settings'
         end
     end.parse!
 
-    Actions.update_settings(options)
+    Cli::Actions.update_settings(options)
 when 'planner'
     subcommand = ARGV.shift
     case subcommand
     when "list"
-        Actions.list_planners(options)
+        Cli::Actions.list_planners(options)
     when "create"
         puts "Enter requirements:"
         requirements = STDIN.gets.chomp
         options[:requirements] = requirements
-        Actions.create_planner(options)
+        Cli::Actions.create_planner(options)
     when "messages"
         OptionParser.new do |opts|
             opts.banner = "Usage: planner messages [options]"
@@ -33,7 +42,7 @@ when 'planner'
             end
         end.parse!
 
-        Actions.view_planner_messages(options) 
+        Cli::Actions.view_planner_messages(options) 
     when "run"
         OptionParser.new do |opts|
             opts.banner = "Usage: planner messages [options]"
@@ -43,7 +52,7 @@ when 'planner'
             end
         end.parse!
 
-        Actions.run_planner(options)
+        Cli::Actions.run_planner(options)
     when "generate_tasks"
         OptionParser.new do |opts|
             opts.banner = "Usage: planner generate_tasks [options]"
@@ -53,7 +62,7 @@ when 'planner'
             end
         end
 
-        Actions.generate_planner_tasks(options)
+        Cli::Actions.generate_planner_tasks(options)
     end
 when 'coder'
     subcommand = ARGV.shift
@@ -73,9 +82,9 @@ when 'coder'
         end.parse!
 
         if options[:from_planner]
-            Actions.create_coder_from_planner(options)
+            Cli::Actions.create_coder_from_planner(options)
         else
-            Actions.create_coder(options)
+            Cli::Actions.create_coder(options)
         end
     when "run"
         OptionParser.new do |opts|
@@ -91,12 +100,12 @@ when 'coder'
         end.parse!
 
         if options[:interactive]
-            Actions.run_coder_interactive(options)
+            Cli::Actions.run_coder_interactive(options)
         else
-            Actions.run_coder(options)
+            Cli::Actions.run_coder(options)
         end
     when "list"
-        Actions.list_coders(options)
+        Cli::Actions.list_coders(options)
     end
 else
   puts 'Invalid command! Use `pairprogrammer help` for more information.'
