@@ -11,17 +11,33 @@ module Cli
             Cli::Display.info_message("Include information about your framework (ie Ruby on Rails), your database, how you handle assets, authentication, etc.")
             Cli::Display.info_message("The more detailed you are the better the LLM will perform.")
             context = Cli::Display.get_input("context: ")
+            
             Cli::Display.info_message("If you haven't already, sign up for an API key at https://pairprogrammer.io")
             Cli::Display.info_message("To skip for now and update later press enter")
             api_key = Cli::Display.get_input("api_key: ")
             
-            Cli::Configuration.create(context, api_key)
+            Cli::Display.info_message("If you are running a python app, which python binary are you using? (python, python2, python3)")
+            Cli::Display.info_message("If you are not using python, press enter to skip")
+            python_command = Cli::Display.get_input("python command: ")
+            
+            Cli::Configuration.create(context, api_key, python_command)
             Cli::Display.success_message("successfully created #{Cli::Configuration::FILE_NAME} - you can update this file at any time")
             Cli::Display.info_message("Please add it to your .gitignore file")
         end
 
         def self.help
-
+            Cli::Display.info_message "Available Commands:"
+            Cli::Display.info_message "  init"
+            Cli::Display.info_message "  help"
+            Cli::Display.info_message "  coding"
+            Cli::Display.info_message "  (coding subcommands: create, run, list)"
+        
+            Cli::Display.info_message "Usage examples:"
+            Cli::Display.info_message "  pairprogrammer init"
+            Cli::Display.info_message "  pairprogrammer help"
+            Cli::Display.info_message "  pairprogrammer coding create"
+            Cli::Display.info_message "  pairprogrammer coding run --id CODER_ID"
+            Cli::Display.info_message "  pairprogrammer coding list"
         end
 
         # CODER
@@ -178,10 +194,8 @@ module Cli
         end
 
         def self.list_coders(options)
-            coders = Coder.list
-            coders.each do |obj|
-                puts "#{obj["id"]} - requirements #{obj["requirements"]} - tasks: #{obj["tasks"].join(", ")}"
-            end
+            coders = PairProgrammer::Api::Coder.list
+            Cli::Display.table(coders, ["id", "context", "requirements", "tasks", "created_at"])
         end
     end
 end

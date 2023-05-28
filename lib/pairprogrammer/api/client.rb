@@ -1,7 +1,6 @@
 require 'net/http'
 require 'uri'
 require 'json'
-require 'byebug'
 require_relative '../configuration'
 
 module PairProgrammer

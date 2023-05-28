@@ -16,6 +16,7 @@ end
 
 PairProgrammer::Configuration.root = Cli::Configuration.new.root
 PairProgrammer::Configuration.api_key = Cli::Configuration.new.api_key
+PairProgrammer::Configuration.python_command = Cli::Configuration.new.python_command
 
 options = {}
 case command
@@ -53,7 +54,11 @@ when 'coding'
         Cli::Actions.run_coder(options)
     when "list"
         Cli::Actions.list_coders(options)
+    else
+        Cli::Display.error_message "Invalid subcommand"
+        Cli::Actions.help
     end
 else
-  puts 'Invalid command! Use `pairprogrammer help` for more information.'
+  Cli::Display.error_message "Invalid command"
+  Cli::Actions.help
 end

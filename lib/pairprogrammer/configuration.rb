@@ -19,5 +19,13 @@ module PairProgrammer
         def self.absolute_path(relative_path)
             File.join(root, relative_path)
         end
+
+        def self.python_command
+            @@python_command
+        end
+
+        def self.python_command=(python_command)
+            @@python_command = python_command
+        end
     end
 end

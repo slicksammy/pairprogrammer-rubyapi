@@ -4,7 +4,11 @@ module Cli
     class Configuration
         FILE_NAME = ".pear-programmer.yml"
 
-        def self.create(context, api_key)
+        def self.create(context, api_key, python_command)
+            if !["python", "python2", "python3"].include?(python_command)
+                raise "Invalid python command, please use python, python2, or python3"
+            end
+            
             File.open(File.join(Dir.pwd, FILE_NAME), "w") do |file|
                 file.write({
                     "version" => 1.0,
@@ -13,6 +17,9 @@ module Cli
                     },
                     "auth" => {
                         "api_key" => api_key,
+                    },
+                    "commands" => {
+                        "python" => python_command,
                     }
                 }.to_yaml)
             end
@@ -26,6 +33,10 @@ module Cli
                 raise "Pear Programmer configuration file does not exist, please run 'pear-on init' or switch to working directory"
             end
             @configuration_file = YAML.load_file(@configuration_file_path)
+        end
+
+        def python_command
+            @configuration_file["commands"]["python"]
         end
 
         def api_key

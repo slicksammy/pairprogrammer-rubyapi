@@ -1,5 +1,5 @@
 Gem::Specification.new do |spec|
-  spec.name          = 'pairprogrammer'
+  spec.name          = 'pear-programmer'
   spec.version       = '0.1.0'
   spec.authors       = ['Your Name']
   spec.email         = ['your.email@example.com']
@@ -9,11 +9,12 @@ Gem::Specification.new do |spec|
   spec.license       = 'MIT'
   spec.files         = Dir['lib/**/*']
   spec.bindir        = 'bin'
-  spec.executables   = ['pear']
+  spec.executables   = ['pear-on']
   spec.require_paths = ['lib']
-  spec.add_dependency 'httparty'
-  spec.add_dependency 'json'
-  spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'rubocop'
-  
+  # TODO add versions to these dependencies
+  spec.add_dependency 'open3'
+  spec.add_dependency 'colorize'
+  spec.add_dependency 'tty-spinner'
+  spec.add_dependency 'terminal-table'
+  spec.add_dependency 'diffy'
 end

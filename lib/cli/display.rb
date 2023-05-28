@@ -2,6 +2,7 @@ require 'colorize'
 require 'tty-spinner'
 # require 'diff/lcs'
 require 'diffy'
+require 'terminal-table'
 
 module Cli
     class Display
@@ -11,6 +12,16 @@ module Cli
             else
                 puts("assistant".colorize(background: :yellow) + ": " + content)
             end
+        end
+
+        def self.table(rows, headers)
+            rows = rows.map(&:values)        
+            table = Terminal::Table.new(
+              headings: headers,
+              rows: rows
+            )
+
+            puts table
         end
 
         def self.get_input(input)

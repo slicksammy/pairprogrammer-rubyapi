@@ -1,5 +1,4 @@
 require_relative 'configuration'
-require 'byebug'
 require 'fileutils'
 require 'open3'
 
@@ -43,6 +42,25 @@ module PairProgrammer
                 puts "creating #{arguments["file_path"]}"
             end
         end
+
+        # default
+        @@default_commands = {
+            python: "python3",
+        }
+
+        def self.python_command
+            PairProgrammer::Configuration.python_command || @default_commands[:python]
+        end
+
+        def self.run_shell(command)
+            output = ""
+            Open3.popen2e(command) do |stdin, stdout_err, wait_thr|
+                while line = stdout_err.gets
+                    output += line
+                end
+            end
+            output
+        end
         
         def self.run(command, arguments)
             case command
@@ -58,7 +76,7 @@ module PairProgrammer
             when "mv"
                 run_shell "cd #{PairProgrammer::Configuration.root} && mv #{arguments["source"]} #{arguments["destination"]}"
             when "python"
-                run_shell "cd #{PairProgrammer::Configuration.root} && python3 manage.py #{arguments["command"]}"
+                run_shell "cd #{PairProgrammer::Configuration.root} && #{python_command} manage.py #{arguments["command"]}"
             when "ls"
                 run_shell "cd #{PairProgrammer::Configuration.root} && ls #{arguments["directory_path"]}"
             when "bundle"
