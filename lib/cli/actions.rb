@@ -20,84 +20,8 @@ module Cli
             Cli::Display.info_message("Please add it to your .gitignore file")
         end
 
-        # SETTINGS
-        def self.update_settings(options)
-            puts PairProgrammer::Settings.current_project
-            if options[:project]
-                puts "updating project to #{options[:project]}"
-                PairProgrammer::Settings.current_project = options[:project]
-            end
-        end
-        # rename this to something fun
-        def self.create_planner(options)
-            puts("creating planner")
-            if options[:context] 
-                context = options[:context]
-            else
-                puts("context not detected, using default context")
-                context = Cli::Configuration.default_context
-            end
-            id = Pairprogrammer::Api::Planner.create(context, options[:requirements])
-            puts("created planner with id #{id}")
-            puts("setting current_planner_id #{id}")
-            Pairprogrammer::Settings.current_planner_id = id
-        end
-        
+        def self.help
 
-        def self.view_planner_messages(options)
-            if options[:id]
-                id = options[:id]
-            else
-                puts("id not detected, using current_planner_id")
-                id = Settings.current_planner_id
-            end
-            Planner.messages(id).each { |m| Display.message(m["role"], m["content"])}
-        end
-
-        def self.list_planners(options)
-            puts Planner.list
-        end
-
-        def self.run_planner(options)
-            if options[:id]
-                id = options[:id]
-            else
-                puts("id not detected, using current_planner_id")
-                id = Settings.current_planner_id
-            end
-            
-            puts Planner.run(id)
-        end
-
-        def self.run_planner(options)
-            if options[:id]
-                id = options[:id]
-            else
-                puts("id not detected, using current_planner_id")
-                id = Settings.current_planner_id
-            end
-
-            Planner.run(id)
-            Planner.messages(id).each { |m| Display.message(m["role"], m["content"]) }
-
-            while true do
-                print "you: "
-                message = gets.chomp
-                Planner.respond(id, message)
-                assistant_message = Planner.run(id)
-                Display.message("assistant", assistant_message["content"])
-            end
-        end
-
-        def self.generate_planner_tasks(options)
-            if options[:id]
-                id = options[:id]
-            else
-                puts("id not detected, using current_planner_id")
-                id = Settings.current_planner_id
-            end
-
-            puts Planner.generate_tasks(id)
         end
 
         # CODER
@@ -125,33 +49,7 @@ module Cli
             puts "Created coding assistant #{id}"
         end
 
-        def self.create_coder_from_planner(options)
-            puts("creating coder from planner")
-            if options[:planner_id] 
-                planner_id = options[:planner_id]
-            else
-                puts("planner_id not detected, using current_planner_id")
-                planner_id = Settings.current_planner_id
-            end
-            id = Coder.create_from_planner(planner_id)
-            Settings.current_coder_id = id
-            puts "Coder created with id #{id}"
-        end
-
         def self.run_coder(options)
-            if options[:id]
-                id = options[:id]
-            else
-                puts("id not detected, using current_coder_id")
-                id = Settings.current_coder_id
-            end
-            
-            command_information = Coder.run(id)
-            output = Command.run(command_information["command"], command_information["arguments"])
-            Coder.append_output(id, output)
-        end
-
-        def self.run_coder_interactive(options)
             config = Cli::Configuration.new
 
             if options[:id]
