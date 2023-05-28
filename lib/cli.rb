@@ -4,20 +4,23 @@ require_relative 'cli/configuration'
 require 'optionparser'
 require_relative 'cli/display'
 
-PairProgrammer::Configuration.root = Cli::Configuration.root
-PairProgrammer::Configuration.api_key = Cli::Configuration.api_key
-
-# Cli::Display.dispaly_diff(File.read("lib/cli/actions.rb"), File.read("lib/cli/display.rb"))
-# return
-
 command = ARGV.shift
+
+if command == "init"
+    Cli::Actions.init
+    return
+end
+
+PairProgrammer::Configuration.root = Cli::Configuration.new.root
+PairProgrammer::Configuration.api_key = Cli::Configuration.new.api_key
+
 options = {}
 case command
 when 'settings'
     OptionParser.new do |opts|
         opts.banner = "Usage: coder create [options]"
         
-        opts.on('-p', '--project CONTEXT', 'Specificy project') do |project|
+        opts.on('-p', '--project PROJECT', 'Specificy project') do |project|
             options[:project] = project
         end
     end.parse!

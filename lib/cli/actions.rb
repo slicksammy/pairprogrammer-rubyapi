@@ -5,6 +5,21 @@ require_relative "display"
 # TODO VALIDATIONS
 module Cli
     class Actions
+        def self.init
+            Cli::Display.info_message("creating #{Cli::Configuration::FILE_NAME} in #{Dir.pwd}")
+            Cli::Display.info_message("Context is any information about your project that you want the large language model to know about. A few sentences should suffice.")
+            Cli::Display.info_message("Include information about your framework (ie Ruby on Rails), your database, how you handle assets, authentication, etc.")
+            Cli::Display.info_message("The more detailed you are the better the LLM will perform.")
+            context = Cli::Display.get_input("context: ")
+            Cli::Display.info_message("If you haven't already, sign up for an API key at https://pairprogrammer.io")
+            Cli::Display.info_message("To skip for now and update later press enter")
+            api_key = Cli::Display.get_input("api_key: ")
+            
+            Cli::Configuration.create(context, api_key)
+            Cli::Display.success_message("successfully created #{Cli::Configuration::FILE_NAME} - you can update this file at any time")
+            Cli::Display.info_message("Please add it to your .gitignore file")
+        end
+
         # SETTINGS
         def self.update_settings(options)
             puts PairProgrammer::Settings.current_project
@@ -87,10 +102,12 @@ module Cli
 
         # CODER
         def self.create_coder(options)
+            config = Cli::Configuration.new
             context = Cli::Display.get_input("context (press enter to use default): ")
             if context.empty?
                 Cli::Display.info_message("using default context")
-                context = Cli::Configuration.default_context
+                Cli::Display.info_message(config.default_context)
+                context = config.default_context
             end
             requirements = Cli::Display.get_input("requirements: ")
             tasks = []
@@ -104,8 +121,8 @@ module Cli
             end
 
             id = PairProgrammer::Api::Coder.create(tasks, context, requirements)
-            Cli::Configuration.current_coder_id = id
-            puts "Coder created with id #{id}"
+            config.current_coder_id = id
+            puts "Created coding assistant #{id}"
         end
 
         def self.create_coder_from_planner(options)
@@ -135,11 +152,14 @@ module Cli
         end
 
         def self.run_coder_interactive(options)
+            config = Cli::Configuration.new
+
             if options[:id]
                 id = options[:id]
             else
-                puts("id not detected, using current_coder_id")
-                id = Cli::Configuration.current_coder_id
+                Cli::Display.info_message("id not detected, using most recent coding assistant")
+                Cli::Display.info_message(config.current_coder_id)
+                id = config.current_coder_id
             end
 
             while true do
@@ -176,6 +196,7 @@ module Cli
 
                 system_message = response["system_message"]
 
+                response_required = true
                 # TODO if there is explanation but no command then response is required
                 if system_message["explanation"] && !system_message["explanation"].empty?
                     Cli::Display.message("assistant", system_message["explanation"])

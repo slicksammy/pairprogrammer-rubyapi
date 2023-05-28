@@ -16,5 +16,9 @@ projects:
     default_context: |
       Ruby on rails 7 app using postgres.
       Using importmap-rails for handling javascript dependencies.
+  pair_programmer:
+    root_path: /Users/sam/Documents/chatgpt/news/pairprogrammer
+    default_context:
+      Ruby CLI for interacting with coding assistant api.
   default: "my_site"
 api_key: xRcwtYXz27TDSvnitYa8
