@@ -5,23 +5,28 @@ module Cli
         FILE_NAME = ".pear-programmer.yml"
 
         def self.create(context, api_key, python_command)
-            if !["python", "python2", "python3"].include?(python_command)
-                raise "Invalid python command, please use python, python2, or python3"
+            if !["python", "python2", "python3", ""].include?(python_command)
+                raise "Invalid python command, please choose python, python2, or python3"
             end
             
+            config = {
+                "version" => 1.0,
+                "project_settings" => {
+                    "context" => context,
+                },
+                "auth" => {
+                    "api_key" => api_key,
+                }
+            }
+
+            if !python_command.empty?
+                config["commands"] = {
+                    "python" => python_command
+                }
+            end
+
             File.open(File.join(Dir.pwd, FILE_NAME), "w") do |file|
-                file.write({
-                    "version" => 1.0,
-                    "project_settings" => {
-                        "context" => context,
-                    },
-                    "auth" => {
-                        "api_key" => api_key,
-                    },
-                    "commands" => {
-                        "python" => python_command,
-                    }
-                }.to_yaml)
+                file.write(config.to_yaml)
             end
         end
 
@@ -36,7 +41,12 @@ module Cli
         end
 
         def python_command
-            @configuration_file["commands"]["python"]
+            command = @configuration_file.try(:[], "commands").try(:[], "python")
+            if command.nil? || command.empty?
+                nil
+            else
+                command
+            end
         end
 
         def api_key

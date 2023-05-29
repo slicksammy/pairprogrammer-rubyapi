@@ -28,7 +28,25 @@ module Cli
         def self.select(title, options)
             prompt = TTY::Prompt.new
 
-            prompt.select(title, options, per_page: 100, columnize: 2)
+            prompt.select(title.colorize(mode: :bold), options, per_page: 100, columnize: 2)
+        end
+
+        def self.confirmation(title)
+            while true do
+                puts(title.colorize(mode: :bold))
+                print("y/N: ".colorize(mode: :bold))
+                response = gets.chomp.downcase
+
+                if response.empty?
+                    puts("Response required".colorize(:red))
+                elsif response == "y"
+                    return true
+                elsif response == "n"
+                    return false
+                else
+                    puts("Invalid response. Must be one letter, case insenstive".colorize(:red))
+                end
+            end
         end
 
         def self.get_input(input)

@@ -23,7 +23,7 @@ case command
 when 'coding'
     subcommand = ARGV.shift
     case subcommand
-    when "create"
+    when "new"
         options[:tasks] = []
         OptionParser.new do |opts|
             opts.banner = "Usage: coder create [options]"
@@ -42,7 +42,7 @@ when 'coding'
         else
             Cli::Actions.create_coder(options)
         end
-    when "run"
+    when "start"
         OptionParser.new do |opts|
             opts.banner = "Usage: coder run [options]"
 
@@ -55,7 +55,7 @@ when 'coding'
     when "list"
         Cli::Actions.list_coders(options)
     else
-        Cli::Display.error_message "Invalid subcommand"
+        Cli::Display.error_message "Invalid coding command"
         Cli::Actions.help
     end
 else

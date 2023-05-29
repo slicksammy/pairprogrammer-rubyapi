@@ -1,11 +1,11 @@
 module PairProgrammer
     class Configuration
         def self.root
-            @@root || ENV["PAIRPROGRAMMER_ROOT"]
+            @@root || ENV["PEAR_PROGRAMMER_ROOT"]
         end
 
         def self.api_key
-            @@api_key || ENV["PAIRPROGRAMMER_API_KEY"]
+            @@api_key || ENV["PEAR_PROGRAMMER_API_KEY"]
         end
 
         def self.api_key=(api_key)
@@ -25,7 +25,12 @@ module PairProgrammer
         end
 
         def self.python_command=(python_command)
-            @@python_command = python_command
+            available_commands = ["python", "python2", "python3"]
+            if available_commands.include?(python_command)
+                @@python_command = python_command
+            else
+                raise "Invalid python command - #{python_command} - command must be one of #{available_commands}"
+            end
         end
     end
 end

@@ -6,6 +6,13 @@ require_relative "display"
 module Cli
     class Actions
         def self.init
+            Cli::Display.info_message("Welcome to Pear Programmer!")
+            confirmation = Cli::Display.confirmation("Are you in the root directory of your project?")
+            if !confirmation
+                Cli::Display.error_message("Please change directory into the root of your project and try again.")
+                return
+            end
+                
             Cli::Display.info_message("creating #{Cli::Configuration::FILE_NAME} in #{Dir.pwd}")
             Cli::Display.info_message("Context is any information about your project that you want the large language model to know about. A few sentences should suffice.")
             Cli::Display.info_message("Include information about your framework (ie Ruby on Rails), your database, how you handle assets, authentication, etc.")
@@ -18,7 +25,7 @@ module Cli
             
             Cli::Display.info_message("If you are running a python app, which python binary are you using? (python, python2, python3)")
             Cli::Display.info_message("If you are not using python, press enter to skip")
-            python_command = Cli::Display.get_input("python command: ")
+            python_command = Cli::Display.select("python command: (choose none if you are not using python)", {"python" => "python", "python2" => "python2", "python3" => "python3", "none" => ""})
             
             Cli::Configuration.create(context, api_key, python_command)
             Cli::Display.success_message("successfully created #{Cli::Configuration::FILE_NAME} - you can update this file at any time")
@@ -27,16 +34,15 @@ module Cli
 
         def self.help
             Cli::Display.info_message "Available Commands:"
-            Cli::Display.info_message "  init"
+            Cli::Display.info_message "  init - initialize pear-programmer from the root of your project"
             Cli::Display.info_message "  help"
-            Cli::Display.info_message "  coding"
-            Cli::Display.info_message "  (coding subcommands: create, run, list)"
+            Cli::Display.info_message "  coding (new|start|list)"
         
             Cli::Display.info_message "Usage examples:"
             Cli::Display.info_message "  pairprogrammer init"
             Cli::Display.info_message "  pairprogrammer help"
-            Cli::Display.info_message "  pairprogrammer coding create"
-            Cli::Display.info_message "  pairprogrammer coding run --id CODER_ID"
+            Cli::Display.info_message "  pairprogrammer coding new"
+            Cli::Display.info_message "  pairprogrammer coding start --id CODER_ID"
             Cli::Display.info_message "  pairprogrammer coding list"
         end
 
@@ -140,24 +146,17 @@ module Cli
                             end
                             
                             Cli::Display.dispaly_diff(original_content, system_message["arguments"]["content"])
-
-                            while true do
-                                confirmation = Cli::Display.get_input("y/N to accept changes: ").downcase
-                                if confirmation.empty?
-                                    next
-                                elsif !['y','n'].include?(confirmation)
-                                    Cli::Display.error_message("invalid input, must be y or N (one letter, case insensitive)")
-                                    next
-                                elsif confirmation == 'n'
-                                    Cli::Display.info_message("changes rejected")
-                                    # PairProgrammer::Api::Coder.append_output(id, "COMMAND REJECTED")
-                                    skip_command = true
-                                    response_required = true
-                                    break
-                                else
-                                    Cli::Display.info_message("changes accepted")
-                                    break
-                                end
+                            
+                            confirmation = Cli::Display.confirmation("Accept changes?")
+                            if !confirmation
+                                Cli::Display.info_message("changes rejected")
+                                # PairProgrammer::Api::Coder.append_output(id, "COMMAND REJECTED")
+                                skip_command = true
+                                response_required = true
+                                break
+                            else
+                                Cli::Display.info_message("changes accepted")
+                                break
                             end
                         end
 

@@ -49,7 +49,7 @@ module PairProgrammer
         }
 
         def self.python_command
-            PairProgrammer::Configuration.python_command || @default_commands[:python]
+            PairProgrammer::Configuration.python_command || @@default_commands[:python]
         end
 
         def self.run_shell(command)
