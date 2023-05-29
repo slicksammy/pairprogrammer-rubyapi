@@ -153,10 +153,8 @@ module Cli
                                 # PairProgrammer::Api::Coder.append_output(id, "COMMAND REJECTED")
                                 skip_command = true
                                 response_required = true
-                                break
                             else
                                 Cli::Display.info_message("changes accepted")
-                                break
                             end
                         end
 

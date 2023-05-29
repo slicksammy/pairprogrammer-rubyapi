@@ -14,9 +14,12 @@ elsif command == "help"
     return
 end
 
-PairProgrammer::Configuration.root = Cli::Configuration.new.root
-PairProgrammer::Configuration.api_key = Cli::Configuration.new.api_key
-PairProgrammer::Configuration.python_command = Cli::Configuration.new.python_command
+config = Cli::Configuration.new
+PairProgrammer::Configuration.root = config.root
+PairProgrammer::Configuration.api_key = config.api_key
+if config.python_command
+    PairProgrammer::Configuration.python_command = config.python_command
+end
 
 options = {}
 case command
