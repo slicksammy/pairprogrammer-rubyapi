@@ -41,7 +41,7 @@ module Cli
         end
 
         def python_command
-            command = @configuration_file.try(:[], "commands").try(:[], "python")
+            command = @configuration_file&.[]("commands")&.[]("python")
             if command.nil? || command.empty?
                 nil
             else
