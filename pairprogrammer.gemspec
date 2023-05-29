@@ -17,4 +17,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'tty-spinner'
   spec.add_dependency 'terminal-table'
   spec.add_dependency 'diffy'
+  spec.add_dependency 'tty-prompt'
 end

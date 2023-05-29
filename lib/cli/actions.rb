@@ -61,7 +61,6 @@ module Cli
             end
 
             id = PairProgrammer::Api::Coder.create(tasks, context, requirements)
-            config.current_coder_id = id
             puts "Created coding assistant #{id}"
         end
 
@@ -71,9 +70,8 @@ module Cli
             if options[:id]
                 id = options[:id]
             else
-                Cli::Display.info_message("id not detected, using most recent coding assistant")
-                Cli::Display.info_message(config.current_coder_id)
-                id = config.current_coder_id
+                coders = PairProgrammer::Api::Coder.list
+                id = Cli::Display.select("Select your coding assistant:", coders.inject({}) { |hash, coder| hash[coder["requirements"]] = coder["id"]; hash })
             end
 
             while true do
@@ -144,10 +142,13 @@ module Cli
                             Cli::Display.dispaly_diff(original_content, system_message["arguments"]["content"])
 
                             while true do
-                                confirmation = Cli::Display.get_input("y/n to accept changes: ")
+                                confirmation = Cli::Display.get_input("y/N to accept changes: ").downcase
                                 if confirmation.empty?
                                     next
-                                elsif !confirmation.downcase.start_with?("y")
+                                elsif !['y','n'].include?(confirmation)
+                                    Cli::Display.error_message("invalid input, must be y or N (one letter, case insensitive)")
+                                    next
+                                elsif confirmation == 'n'
                                     Cli::Display.info_message("changes rejected")
                                     # PairProgrammer::Api::Coder.append_output(id, "COMMAND REJECTED")
                                     skip_command = true

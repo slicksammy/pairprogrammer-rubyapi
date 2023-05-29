@@ -3,6 +3,7 @@ require 'tty-spinner'
 # require 'diff/lcs'
 require 'diffy'
 require 'terminal-table'
+require 'tty-prompt'
 
 module Cli
     class Display
@@ -22,6 +23,12 @@ module Cli
             )
 
             puts table
+        end
+
+        def self.select(title, options)
+            prompt = TTY::Prompt.new
+
+            prompt.select(title, options, per_page: 100, columnize: 2)
         end
 
         def self.get_input(input)

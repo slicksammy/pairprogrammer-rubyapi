@@ -43,15 +43,6 @@ module Cli
             @configuration_file["auth"]["api_key"]
         end
 
-        def current_coder_id=(coder_id)
-            @configuration_file["project_settings"]["coder_id"] = coder_id
-            update_file(@configuration_file)
-        end
-
-        def current_coder_id
-            @configuration_file["project_settings"]["coder_id"]
-        end
-
         def default_context
             @configuration_file["project_settings"]["context"]
         end
