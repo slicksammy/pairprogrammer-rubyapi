@@ -84,6 +84,7 @@ module Cli
 
         def self.run_coder(options)
             config = Cli::Configuration.new
+            auto = !!options[:auto]
 
             if options[:id]
                 id = options[:id]
@@ -186,6 +187,10 @@ module Cli
                 end
 
                 while true do
+                    if !response_required && auto
+                        break
+                    end
+
                     display = response_required ? "required" : "optional"
                     message = Cli::Display.get_input("response (#{display}): ")
                     if message.empty?

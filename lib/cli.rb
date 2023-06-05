@@ -55,6 +55,10 @@ when 'coding'
             opts.on('--id ID', 'Specify id') do |id|
                 options[:id] = id
             end
+
+            opts.on('-a, --auto', 'Specify auto') do |auto|
+                options[:auto] = true
+            end
         end.parse!
 
         Cli::Actions.run_coder(options)
