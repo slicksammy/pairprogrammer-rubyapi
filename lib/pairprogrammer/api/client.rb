@@ -8,9 +8,10 @@ module PairProgrammer
         class Client
             def initialize
                 @api_key = PairProgrammer::Configuration.api_key
+                # TODO api key is not always required, ie checking version
                 raise "Missing api key" if @api_key.nil?
 
-                @domain = 'http://localhost:8000'
+                @domain = PairProgrammer::Configuration.development? ? 'http://localhost:8000' : 'https://api.pairprogrammer.io'
             end
 
             def get(endpoint, query_params={})

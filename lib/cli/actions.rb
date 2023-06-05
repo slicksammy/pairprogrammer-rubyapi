@@ -1,5 +1,6 @@
 require_relative "../pairprogrammer"
 require_relative "display"
+require_relative "version"
 # need to require file
 
 # TODO VALIDATIONS
@@ -30,6 +31,17 @@ module Cli
             Cli::Configuration.create(context, api_key, python_command)
             Cli::Display.success_message("successfully created #{Cli::Configuration::FILE_NAME} - you can update this file at any time")
             Cli::Display.info_message("Please add it to your .gitignore file")
+        end
+
+        def self.check_cli_version
+            versions = PairProgrammer::Api::Version.versions
+            if versions["cli"] != Cli::Version::VERSION
+                Cli::Display.info_message("A new version of the CLI is available, installing update")
+                gem = PairProgrammer::Configuration.development? ? "pear-programmer-0.1.gem" : "pear-programmer"
+                Cli::Display.info_message("Running gem update #{gem}")
+                system("gem update #{gem}")
+                Cli::Display.success_message("Update complete")
+            end
         end
 
         def self.help

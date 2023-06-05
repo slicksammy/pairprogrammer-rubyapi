@@ -1,6 +1,5 @@
 require 'colorize'
 require 'tty-spinner'
-# require 'diff/lcs'
 require 'diffy'
 require 'terminal-table'
 require 'tty-prompt'
@@ -27,7 +26,6 @@ module Cli
 
         def self.select(title, options)
             prompt = TTY::Prompt.new
-
             prompt.select(title.colorize(mode: :bold), options, per_page: 100, columnize: 2)
         end
 

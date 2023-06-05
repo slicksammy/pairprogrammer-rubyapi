@@ -1,5 +1,8 @@
 module PairProgrammer
     class Configuration
+
+        @@api_key = nil
+
         def self.root
             @@root || ENV["PEAR_PROGRAMMER_ROOT"]
         end
@@ -31,6 +34,10 @@ module PairProgrammer
             else
                 raise "Invalid python command - #{python_command} - command must be one of #{available_commands}"
             end
+        end
+
+        def self.development?
+            ENV["PEAR_PROGRAMMER_ENV"] == "development"
         end
     end
 end

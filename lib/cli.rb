@@ -4,6 +4,7 @@ require_relative 'cli/configuration'
 require 'optionparser'
 require_relative 'cli/display'
 
+
 command = ARGV.shift
 
 if command == "init"
@@ -20,6 +21,8 @@ PairProgrammer::Configuration.api_key = config.api_key
 if config.python_command
     PairProgrammer::Configuration.python_command = config.python_command
 end
+
+Cli::Actions.check_cli_version
 
 options = {}
 case command

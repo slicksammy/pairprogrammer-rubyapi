@@ -9,6 +9,7 @@ module Cli
                 raise "Invalid python command, please choose python, python2, or python3"
             end
             
+            # the version of the configuration file, not cli version
             config = {
                 "version" => 1.0,
                 "project_settings" => {
