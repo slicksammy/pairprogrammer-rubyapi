@@ -34,7 +34,7 @@ module Cli
         end
 
         def self.check_cli_version
-            versions = PairProgrammer::Api::Version.versions
+            versions = PairProgrammer::Api::System.versions
             if versions["cli"] != Cli::Version::VERSION
                 Cli::Display.info_message("A new version of the CLI is available, installing update")
                 gem = PairProgrammer::Configuration.development? ? "pear-programmer-0.1.gem" : "pear-programmer"
@@ -42,6 +42,14 @@ module Cli
                 system("gem update #{gem}")
                 Cli::Display.success_message("Update complete")
             end
+        end
+
+        def self.report_exception(argv, e)
+            command = argv.join(" ")
+            version = Cli::Version::VERSION
+            PairProgrammer::Api::System.client_exception(command, e, version)
+            Cli::Display.error_message("An error occurred")
+            Cli::Display.error_message(e.message)
         end
 
         def self.help
@@ -187,6 +195,7 @@ module Cli
                 end
 
                 while true do
+                    # user does not have to respond if auto is true
                     if !response_required && auto
                         break
                     end

@@ -39,6 +39,11 @@ module Cli
                 raise "Pear Programmer configuration file does not exist, please run 'pear-on init' or switch to working directory"
             end
             @configuration_file = YAML.load_file(@configuration_file_path)
+
+            # validations
+            if @configuration_file["auth"]&.[]("api_key").nil? || @configuration_file["auth"]["api_key"].empty?
+                raise "Pear Programmer api key is missing. Please add your api key to #{@configuration_file_path}"
+            end
         end
 
         def python_command
