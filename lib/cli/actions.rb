@@ -44,8 +44,7 @@ module Cli
             end
         end
 
-        def self.report_exception(argv, e)
-            command = argv.join(" ")
+        def self.report_exception(command, e)
             version = Cli::Version::VERSION
             PairProgrammer::Api::System.client_exception(command, e, version)
             Cli::Display.error_message("An error occurred")

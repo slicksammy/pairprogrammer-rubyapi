@@ -33,7 +33,7 @@ module Cli
             while true do
                 puts(title.colorize(mode: :bold))
                 print("y/N: ".colorize(mode: :bold))
-                response = gets.chomp.downcase
+                response = STDIN.gets.chomp.downcase
 
                 if response.empty?
                     puts("Response required".colorize(:red))
@@ -49,7 +49,7 @@ module Cli
 
         def self.get_input(input)
             print(input.colorize(mode: :bold))
-            gets.chomp
+            STDIN.gets.chomp
         end
 
         def self.success_message(message)

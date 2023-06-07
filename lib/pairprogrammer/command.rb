@@ -115,7 +115,7 @@ module PairProgrammer
                 run_shell "cd #{PairProgrammer::Configuration.root} && rspec #{file_path}}"
             when "ask_question"
                 puts arguments["question"]
-                gets.chomp
+                STDIN.gets.chomp
             when "read_file"
                 file_path = PairProgrammer::Configuration.absolute_path(arguments["file_path"])
                 if File.exists?(file_path)

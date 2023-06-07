@@ -54,6 +54,6 @@ begin
         Cli::Actions.help
     end
 rescue => e
-    Cli::Actions.report_exception(ARGV, e)
+    Cli::Actions.report_exception(ARGV.join(" "), e)
 end
 
