@@ -218,7 +218,7 @@ module Cli
 
         def self.list_coders(options)
             coders = PairProgrammer::Api::Coder.list
-            Cli::Display.table(coders, ["id", "context", "requirements", "tasks", "created_at"])
+            Cli::Display.table(coders, ["id", "tasks", "requirements", "created_at"])
         end
     end
 end

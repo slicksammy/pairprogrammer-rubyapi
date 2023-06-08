@@ -11,7 +11,7 @@ module PairProgrammer
                 # TODO api key is not always required, ie checking version
                 raise "Missing api key" if @api_key.nil?
 
-                @domain = PairProgrammer::Configuration.development? ? 'http://localhost:8000' : 'https://api.pairprogrammer.io'
+                @domain = PairProgrammer::Configuration.development? ? 'http://localhost:8000' : 'https://www.pearprogrammer.dev'
             end
 
             def get(endpoint, query_params={})
