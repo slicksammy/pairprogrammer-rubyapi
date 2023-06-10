@@ -58,22 +58,22 @@ module Cli
             Cli::Display.info_message "  coding (new|start|list)"
         
             Cli::Display.info_message "Usage examples:"
-            Cli::Display.info_message "  pairprogrammer init"
-            Cli::Display.info_message "  pairprogrammer help"
-            Cli::Display.info_message "  pairprogrammer coding new"
-            Cli::Display.info_message "  pairprogrammer coding start --id CODER_ID"
-            Cli::Display.info_message "  pairprogrammer coding list"
+            Cli::Display.info_message "  pear-on init"
+            Cli::Display.info_message "  pear-on help"
+            Cli::Display.info_message "  pear-on coding new (define a new set of requirements and tasks)"
+            Cli::Display.info_message "  pear-on coding start (-a, --auto | will prompt you only when required)"
+            Cli::Display.info_message "  pear-on coding list (list all requirements)"
         end
 
         # CODER
         def self.create_coder(options)
             config = Cli::Configuration.new
-            context = Cli::Display.get_input("context (press enter to use default): ")
-            if context.empty?
-                Cli::Display.info_message("using default context")
-                Cli::Display.info_message(config.default_context)
-                context = config.default_context
-            end
+            # context = Cli::Display.get_input("context (press enter to use context from your #{Cli::Configuration::FILE_NAME} file): ")
+            # if context.empty?
+            Cli::Display.info_message("using context from your #{Cli::Configuration::FILE_NAME} file:")
+            Cli::Display.info_message(config.default_context)
+            context = config.default_context
+            # end
             requirements = Cli::Display.get_input("requirements: ")
             tasks = []
             while true do
@@ -86,7 +86,8 @@ module Cli
             end
 
             id = PairProgrammer::Api::Coder.create(tasks, context, requirements)
-            puts "Created coding assistant #{id}"
+            Cli::Display.success_message("Done")
+            Cli::Display.info_message("You can now run pear-on coding start")
         end
 
         def self.run_coder(options)
@@ -97,7 +98,7 @@ module Cli
                 id = options[:id]
             else
                 coders = PairProgrammer::Api::Coder.list
-                id = Cli::Display.select("Select your coding assistant:", coders.inject({}) { |hash, coder| hash[coder["requirements"]] = coder["id"]; hash })
+                id = Cli::Display.select("Select which requirements you would like to work on", coders.inject({}) { |hash, coder| hash[coder["requirements"]] = coder["id"]; hash })
             end
 
             while true do
@@ -114,12 +115,12 @@ module Cli
                 end
                 
                 if response["running"]
-                    Cli::Display.info_message("coder is still running, will try again in 20 seconds")
+                    Cli::Display.info_message("assistant is still running, will try again in 20 seconds")
                     sleep(20)
                     next
                 elsif response["reached_max_length"]
                     Cli::Display.error_message("conversation has reached its context length due to limitations with LLMs")
-                    Cli::Display.error_message("please create a new coder, this coder will no longer be able to run")
+                    Cli::Display.error_message("please create a new set of requirements")
                     return
                 elsif response["error"]
                     Cli::Display.error_message("there was an error processing the assistant's response")
