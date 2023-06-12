@@ -159,7 +159,7 @@ module Cli
                             file_path = PairProgrammer::Configuration.absolute_path(system_message["arguments"]["file_path"])
                             begin
                                 original_content = File.read(file_path)
-                            rescue Errno::ENOENT
+                            rescue Errno::ENOENT => e
                                 Cli::Display.error_message("there was an error running the command, notifying assistant of error.")
                                 PairProgrammer::Api::Coder.append_exception(id, e)
                                 Cli::Display.info_message("retrying...")
