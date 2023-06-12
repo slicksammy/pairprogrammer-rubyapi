@@ -124,7 +124,8 @@ module Cli
                     return
                 elsif response["error"]
                     Cli::Display.error_message("there was an error processing the assistant's response")
-                    Cli::Display.info_message("retrying...")
+                    Cli::Display.info_message("retrying in 5 seconds")
+                    sleep(5)
                     next
                 end
 
