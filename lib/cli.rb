@@ -54,6 +54,7 @@ begin
         Cli::Actions.help
     end
 rescue => e
+    # TODO: log ruby version too
     Cli::Actions.report_exception(ARGV.join(" "), e)
 end
 
