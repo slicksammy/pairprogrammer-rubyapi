@@ -35,7 +35,7 @@ module Cli
         def initialize
             @root = Dir.pwd
             @configuration_file_path = File.join(@root, FILE_NAME)
-            if !File.exists?(@configuration_file_path)
+            if !File.exist?(@configuration_file_path)
                 raise "Pear Programmer configuration file does not exist, please run 'pear-on init' or switch to working directory"
             end
             @configuration_file = YAML.load_file(@configuration_file_path)

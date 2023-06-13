@@ -118,7 +118,7 @@ module PairProgrammer
                 STDIN.gets.chomp
             when "read_file"
                 file_path = PairProgrammer::Configuration.absolute_path(arguments["file_path"])
-                if File.exists?(file_path)
+                if File.exist?(file_path)
                     File.read(file_path)
                 else
                     "file does not exist"
