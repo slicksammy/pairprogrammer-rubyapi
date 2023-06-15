@@ -14,7 +14,7 @@ This Ruby CLI allows you to interact with a backend and performs various tasks u
 - `pear-on init`: Initialize the CLI.
 - `pear-on help`: Show help.
 - `pear-on coding new`: Create a new coding assistant.
-- `pear-on coding start --id CODER_ID`: Start a specific coding assistant.
+- `pear-on coding start -a`: Start a specific coding assistant.
 - `pear-on coding list`: List available coding assistants.
 
 For more information on commands and their usage, run `pear-on help`.
