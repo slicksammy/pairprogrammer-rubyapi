@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = 'pear-programmer'
-  spec.version       = '0.1.7'
+  spec.version       = '0.1.8'
   spec.authors       = ['Sam Edelstein']
   spec.email         = ['your.email@example.com']
   spec.summary       = 'Ruby CLI for interacting with coding assistant API'

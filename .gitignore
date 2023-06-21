@@ -1,3 +1,4 @@
 .pear-*
 .byebug_history
 .pear-programmer-0.1.0.gem
+*.gem

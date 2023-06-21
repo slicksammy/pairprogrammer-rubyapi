@@ -49,7 +49,7 @@ module Cli
 
         def self.get_input(input)
             print(input.colorize(mode: :bold))
-            STDIN.gets.chomp
+            STDIN.gets&.chomp || ''
         end
 
         def self.success_message(message)
