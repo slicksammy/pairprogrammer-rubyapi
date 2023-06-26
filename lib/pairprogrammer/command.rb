@@ -71,6 +71,7 @@ module PairProgrammer
                 File.open(file_path, 'w') do |file|
                     file_content.each { |line| file.puts(line) }
                 end
+                "file updated"
             when "yarn"
                 run_shell "cd #{PairProgrammer::Configuration.root} && yarn #{arguments["command"]}"
             when "mv"
@@ -90,12 +91,13 @@ module PairProgrammer
                 File.open(file_path, "w") do |file|
                     file.puts(arguments["content"])
                 end
+                "file updated"
             when "create_directory"
                 directory_path = PairProgrammer::Configuration.absolute_path(arguments["directory_path"])
-                FileUtils.mkdir_p(directory_path)
+                FileUtils.mkdir_p(directory_path) || "directory created"
             when "delete_file"
                 file_path = PairProgrammer::Configuration.absolute_path(arguments["file_path"])
-                File.delete(file_path)
+                File.delete(file_path) || "file_deleted"
             when "view_changes"
                 # TODO
             when "delete_lines"
@@ -109,13 +111,13 @@ module PairProgrammer
                 lines.delete_if.with_index { |line, index| line_numbers.include?(index) }
 
                 # Write the modified contents back to the file
-                File.write(file_path, lines.join)
+                File.write(file_path, lines.join) || "lines deleted"
             when "rspec"
                 file_path = PairProgrammer::Configuration.absolute_path(arguments["file_path"])
                 run_shell "cd #{PairProgrammer::Configuration.root} && rspec #{file_path}}"
             when "ask_question"
                 puts arguments["question"]
-                STDIN.gets.chomp
+                STDIN.gets.chomp || ''
             when "read_file"
                 file_path = PairProgrammer::Configuration.absolute_path(arguments["file_path"])
                 if File.exist?(file_path)
@@ -126,7 +128,7 @@ module PairProgrammer
             when "create_file"
                 # TODO return response if file is already created
                 file_path = PairProgrammer::Configuration.absolute_path(arguments["file_path"])
-                FileUtils.touch(file_path)
+                FileUtils.touch(file_path) || "file created"
             else
                 raise "Invalid command: #{command}"
             end

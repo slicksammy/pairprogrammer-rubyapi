@@ -29,10 +29,11 @@ module PairProgrammer
                 Client.new.post('/api/v1/coder/run', body)
             end
 
-            def self.append_output(id, output)
+            def self.append_output(id, output, command_name)
                 body = {
                     id: id,
-                    output: output
+                    output: output,
+                    command: command_name
                 }
                 Client.new.post('/api/v1/coder/append_output', body)
             end

@@ -190,7 +190,7 @@ module Cli
                                 Cli::Display.info_message("retrying...")
                                 next
                             end
-                            PairProgrammer::Api::Coder.append_output(id, output)
+                            PairProgrammer::Api::Coder.append_output(id, output, system_message["command"])
                         end
                     end
                 end
