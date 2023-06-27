@@ -98,6 +98,11 @@ module Cli
                 id = options[:id]
             else
                 coders = PairProgrammer::Api::Coder.list
+                if coders.empty?
+                    Cli::Display.error_message("you have not created any requirements yet")
+                    return
+                end
+
                 id = Cli::Display.select("Select which requirements you would like to work on", coders.inject({}) { |hash, coder| hash[coder["requirements"]] = coder["id"]; hash })
             end
 
@@ -135,6 +140,9 @@ module Cli
                 end
 
                 system_message = response["system_message"]
+                if system_message.nil?
+                    next
+                end
 
                 response_required = true
                 # TODO if there is explanation but no command then response is required
