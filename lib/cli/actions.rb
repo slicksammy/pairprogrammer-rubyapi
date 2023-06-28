@@ -102,13 +102,14 @@ module Cli
             end
 
             id = PairProgrammer::Api::Coder.create(tasks, context, requirements, nil)
-            Cli::Display.success_message("Done")
-            Cli::Display.info_message("You can now run pear-on coding start")
+            Cli::Display.success_message("created and running")
+
+            run_coder({ id: id })
         end
 
         def self.run_coder(options)
             config = Cli::Configuration.new
-            auto = !!options[:auto]
+            auto = true #!!options[:auto]
 
             if options[:id]
                 id = options[:id]
