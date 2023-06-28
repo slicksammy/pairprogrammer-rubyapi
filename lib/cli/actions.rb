@@ -65,6 +65,22 @@ module Cli
             Cli::Display.info_message "  pear-on coding list (list all requirements)"
         end
 
+        def self.create_and_run_remember(options)
+            requirements = Cli::Display.get_input("what would you like to remember?: ")
+            config = Cli::Configuration.new
+            context = config.default_context
+            id = PairProgrammer::Api::Coder.create([], context, requirements, "remember")
+            run_coder({ id: id })
+        end
+
+        def self.create_and_run_recall(options)
+            requirements = Cli::Display.get_input("what would you like to recall?: ")
+            config = Cli::Configuration.new
+            context = config.default_context
+            id = PairProgrammer::Api::Coder.create([], context, requirements, "recall")
+            run_coder({ id: id })
+        end
+
         # CODER
         def self.create_coder(options)
             config = Cli::Configuration.new
@@ -85,7 +101,7 @@ module Cli
                 end
             end
 
-            id = PairProgrammer::Api::Coder.create(tasks, context, requirements)
+            id = PairProgrammer::Api::Coder.create(tasks, context, requirements, nil)
             Cli::Display.success_message("Done")
             Cli::Display.info_message("You can now run pear-on coding start")
         end

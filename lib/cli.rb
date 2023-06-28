@@ -28,6 +28,10 @@ begin
 
     options = {}
     case command
+    when 'remember'
+        Cli::Actions.create_and_run_remember(options)
+    when 'recall'
+        Cli::Actions.create_and_run_recall(options)
     when 'coding'
         subcommand = ARGV[1]
         case subcommand

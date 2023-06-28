@@ -3,11 +3,12 @@ require_relative 'client'
 module PairProgrammer
     module Api
         class Coder
-            def self.create(tasks, context, requirements)
+            def self.create(tasks, context, requirements, recipe=nil)
                 body = {
                     tasks: tasks,
                     context: context,
                     requirements: requirements,
+                    recipe: recipe
                 }
                 response = Client.new.post('/api/v1/coder', body)
                 response["id"]
