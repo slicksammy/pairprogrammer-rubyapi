@@ -70,6 +70,7 @@ module Cli
             config = Cli::Configuration.new
             context = config.default_context
             id = PairProgrammer::Api::Coder.create([], context, requirements, "remember")
+            
             run_coder({ id: id })
         end
 
@@ -78,6 +79,19 @@ module Cli
             config = Cli::Configuration.new
             context = config.default_context
             id = PairProgrammer::Api::Coder.create([], context, requirements, "recall")
+            
+            run_coder({ id: id })
+        end
+
+        def self.create_and_run_recipe(options)
+            recipe = options[:recipe]
+            raise "Recipe cannot be blank" if recipe.nil? || recipe.empty?
+
+            requirements = Cli::Display.get_input("requirements: ")
+            config = Cli::Configuration.new
+            context = config.default_context
+            id = PairProgrammer::Api::Coder.create([], context, requirements, recipe)
+            
             run_coder({ id: id })
         end
 
@@ -102,7 +116,7 @@ module Cli
             end
 
             id = PairProgrammer::Api::Coder.create(tasks, context, requirements, nil)
-            Cli::Display.success_message("created and running")
+            Cli::Display.success_message("Created and run starting")
 
             run_coder({ id: id })
         end

@@ -28,6 +28,9 @@ begin
 
     options = {}
     case command
+    when 'recipe'
+        options[:recipe] = ARGV[1]
+        Cli::Actions.create_and_run_recipe(options)
     when 'remember'
         Cli::Actions.create_and_run_remember(options)
     when 'recall'
