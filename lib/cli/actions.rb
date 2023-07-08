@@ -34,6 +34,8 @@ module Cli
         end
 
         def self.check_cli_version
+            return if PairProgrammer::Configuration.development?
+
             versions = PairProgrammer::Api::System.versions
             if versions["cli"] != Cli::Version::VERSION
                 Cli::Display.info_message("A new version of the CLI is available, installing update")
