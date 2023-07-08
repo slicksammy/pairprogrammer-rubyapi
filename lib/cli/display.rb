@@ -47,9 +47,31 @@ module Cli
             end
         end
 
+        # def self.get_input(input)
+        #     print(input.colorize(mode: :bold))
+        #     lines = []
+        #     while (line = STDIN.gets&.chomp) != ""
+        #         lines << line
+        #     end
+        #     lines.join("\n")
+        # end
+
+        # def self.get_input(input)
+        #     print(input.colorize(mode: :bold))
+        #     lines = []
+        #     begin
+        #         while line = STDIN.readline&.chomp
+        #             lines << line
+        #         end
+        #     rescue EOFError
+        #     end
+        #     lines.join("\n")
+        # end
+
         def self.get_input(input)
-            print(input.colorize(mode: :bold))
-            STDIN.gets&.chomp || ''
+            prompt = TTY::Prompt.new
+            lines = prompt.multiline(input.colorize(mode: :bold))
+            lines.join("\n")
         end
 
         def self.success_message(message)
